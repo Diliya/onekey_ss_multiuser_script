@@ -1,6 +1,10 @@
 # onekey_ss_multiuser_script
 Thanks lasyman!Just update some code to suit the ubuntu 16.04
+
+
 Former script link:https://github.com/lasyman/lasyman_setup_ss
+
+
 Use the shell script to setup shadowsocks on Ubuntu 1604 or CentOs 6.5
 
 1. First you must git clone this script to your VPS
