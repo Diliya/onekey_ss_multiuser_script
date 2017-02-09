@@ -8,7 +8,7 @@
 # History:
 #	suit the ubuntu 16.04
 #----------------------------------------
-#   fix bugs and code optimization
+#   	fix bugs and code optimization
 #	add code to support ubuntu 14.04
 #----------------------------------------
 #	modify for new ss-panel version and add start-up for service@0609
