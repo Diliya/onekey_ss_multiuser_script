@@ -11,6 +11,6 @@ Use the shell script to setup shadowsocks on Ubuntu 1604 or CentOs 6.5
 
 2. Run it by command # bash lasyman_setup_ss.sh(if you get an error when running the script.Please run dos2unix before.)
 
-3. After the script done, you can visit your VPS IP to see the result
+3. After the script done, you can visit your VPS IP to see the result(There are some errors when using IE,plese use chrome or firefox)
 
 4. Goodluck man!
