@@ -1,14 +1,15 @@
 #!/bin/bash
 ##########################################
 # File Name: lasy_setup_ss.sh
-# Author: Allan Xing
-# Email: xingpeng2012@gmail.com
-# Date: 20150301
-# Version: v2.0
+# Former Author: Allan Xing
+# Update by：Diliya
+# Date: 20170209
+# Version: v2.1
 # History:
-#	add centos support@0319
+#	suit the ubuntu 16.04
 #----------------------------------------
-#   fix bugs and code optimization@0319
+#   fix bugs and code optimization
+#	add code to support ubuntu 14.04
 #----------------------------------------
 #	modify for new ss-panel version and add start-up for service@0609
 ##########################################
@@ -26,10 +27,13 @@ RESET=1
 #----------------------------------------
 
 #check OS version
-CHECK_OS_VERSION=`cat /etc/issue |sed -n 1"$1"p|awk '{printf $1}' |tr 'a-z' 'A-Z'`
+CHECK_OS_VERSION=`cat /etc/issue |sed -n 1"$1"p|awk '{split($1$2,b,".");printf b[1]b[2]}' |tr 'a-z' 'A-Z'' '`
 
 #list the software need to be installed to the variable FILELIST
-UBUNTU_TOOLS_LIBS="apt-get update&&apt-get install screen python-pip mysql-server libapache2-mod-php python-m2crypto php7.0-cli git apache2 php7.0-gd php7.0-mysql php7.0-dev libmysqlclient-dev php7.0-curl php-pear language-pack-zh*"
+UBUNTU14_TOOLS_LIBS="python-pip mysql-server libapache2-mod-php5 python-m2crypto php5-cli git \
+				apache2 php5-gd php5-mysql php5-dev libmysqlclient15-dev php5-curl php-pear language-pack-zh*"
+
+UBUNTU16_TOOLS_LIBS="apt-get update&&apt-get install screen python-pip mysql-server libapache2-mod-php python-m2crypto php7.0-cli git apache2 php7.0-gd php7.0-mysql php7.0-dev libmysqlclient-dev php7.0-curl php-pear language-pack-zh*"
 
 CENTOS_TOOLS_LIBS="php55w php55w-opcache mysql55w mysql55w-server php55w-mysql php55w-gd libjpeg* \
 				php55w-imap php55w-ldap php55w-odbc php55w-pear php55w-xml php55w-xmlrpc php55w-mbstring \
@@ -38,9 +42,16 @@ CENTOS_TOOLS_LIBS="php55w php55w-opcache mysql55w mysql55w-server php55w-mysql p
 ## check whether system is Ubuntu or not
 function check_OS_distributor(){
 	echo "checking distributor and release ID ..."
-	if [[ "${CHECK_OS_VERSION}" == "UBUNTU" ]] ;then
+	if [[ "${CHECK_OS_VERSION}" == "UBUNTU1404" ]] ;then
+		
 		echo -e "\tCurrent OS: ${CHECK_OS_VERSION}"
 		UBUNTU=1
+		UBUNTU14=1
+	elif [[ "${CHECK_OS_VERSION}" == "UBUNTU1404" ]] ;then
+		echo -e "\tCurrent OS: ${CHECK_OS_VERSION}"
+		UBUNTU=1
+		UBUNTU16=1
+
 	elif [[ "${CHECK_OS_VERSION}" == "CENTOS" ]] ;then
 		echo -e "\tCurrent OS: ${CHECK_OS_VERSION}!!!"
 		CENTOS=1
@@ -131,13 +142,30 @@ fi
 }
 
 #install one software every cycle
+#加个判断UBUNTU版本
 function install_soft_for_each(){
 	echo "check OS version..."
 	check_OS_distributor
-	if [[ ${UBUNTU} -eq 1 ]];then
-		echo "Will install below software on your Ubuntu system:"
+	if [[ ${UBUNTU14} -eq 1 ]];then
+		echo "Will install below software on your Ubuntu14 system:"
 		update_system
-		for file in ${UBUNTU_TOOLS_LIBS}
+		for file in ${UBUNTU14_TOOLS_LIBS}
+		do
+			trap 'echo -e "\ninterrupted by user, exit";exit' INT
+			echo "========================="
+			echo "installing $file ..."
+			echo "-------------------------"
+			apt-get install $file -y
+			sleep 1
+			echo "$file installed ."
+		done
+		pip install cymysql shadowsocks
+		echo "=======ready to reset mysql root password========"
+		reset_mysql_root_pwd
+		elif [[ ${UBUNTU16} -eq 1 ]];then
+		echo "Will install below software on your Ubuntu16 system:"
+		update_system
+		for file in ${UBUNTU16_TOOLS_LIBS}
 		do
 			trap 'echo -e "\ninterrupted by user, exit";exit' INT
 			echo "========================="
