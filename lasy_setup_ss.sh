@@ -8,7 +8,7 @@
 # History:
 #	suit the ubuntu 16.04
 #----------------------------------------
-#   	fix bugs and code optimization
+#   fix bugs and code optimization
 #	add code to support ubuntu 14.04
 #----------------------------------------
 #	modify for new ss-panel version and add start-up for service@0609
@@ -47,7 +47,7 @@ function check_OS_distributor(){
 		echo -e "\tCurrent OS: ${CHECK_OS_VERSION}"
 		UBUNTU=1
 		UBUNTU14=1
-	elif [[ "${CHECK_OS_VERSION}" == "UBUNTU1404" ]] ;then
+	elif [[ "${CHECK_OS_VERSION}" == "UBUNTU1604" ]] ;then
 		echo -e "\tCurrent OS: ${CHECK_OS_VERSION}"
 		UBUNTU=1
 		UBUNTU16=1
